@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="">
+
+	<!-- 여기에 작성 -->
+	<!-- 
+	<resultMap type="Main" id="_main">
+      	<result property="gateName" column="gate_name" />
+      	<result property="gateStatus" column="gate_status" />
+      	<result property="commStatus" column="comm_status" />
+      	<result property="openTimeCnt0" column="open_time_cnt_0" />
+      	<result property="openTimeCnt1" column="open_time_cnt_1" />
+      	<result property="openTimeCnt2" column="open_time_cnt_2" />
+      	<result property="openTimeCnt3" column="open_time_cnt_3" />
+      	<result property="openTimeCnt4" column="open_time_cnt_4" />
+      	<result property="openTimeCnt5" column="open_time_cnt_5" />
+      	<result property="closeTimeCnt0" column="close_time_cnt_0" />
+      	<result property="closeTimeCnt1" column="close_time_cnt_1" />
+      	<result property="closeTimeCnt2" column="close_time_cnt_2" />
+      	<result property="closeTimeCnt3" column="close_time_cnt_3" />
+      	<result property="closeTimeCnt4" column="close_time_cnt_4" />
+      	<result property="closeTimeCnt5" column="close_time_cnt_5" />
+      	<result property="gateTotalCnt" column="gate_total_cnt" />
+      	<result property="gateOpenCnt" column="gate_open_cnt" />
+      	<result property="gateCloseCnt" column="gate_close_cnt" />
+      	<result property="gateDisableCnt" column="gate_disable_cnt" />
+      	<result property="cameraTotalCnt" column="camera_total_cnt" />
+      	<result property="ipAddr" column="ip_addr" />
+
+	</resultMap> 
+	
+	
+	  <resultMap id="_int" type="java.lang.Integer"/>
+	 -->
+	
+	 <!-- 개문횟수 -->
+	 <!-- 
+	<select id="openGateList" resultMap="_main">
+		DECLARE
+		@fr_time_0		NVARCHAR(8) = '00:00:00'
+		, @to_time_0	NVARCHAR(8) = '10:59:99'
+		, @fr_time_1	NVARCHAR(8) = '11:00:00'
+		, @to_time_1	NVARCHAR(8) = '12:59:99'
+		, @fr_time_2	NVARCHAR(8) = '13:00:00'
+		, @to_time_2	NVARCHAR(8) = '16:59:99'
+		, @fr_time_3	NVARCHAR(8) = '17:00:00'
+		, @to_time_3	NVARCHAR(8) = '19:59:99'
+		, @fr_time_4	NVARCHAR(8) = '20:00:00'
+		, @to_time_4	NVARCHAR(8) = '21:59:99'
+		, @fr_time_5	NVARCHAR(8) = '21:00:00'
+		, @to_time_5	NVARCHAR(8) = '23:59:99'
+		SELECT
+		SUM(DATA.time_0) AS open_time_cnt_0
+		, SUM(DATA.time_1) AS open_time_cnt_1
+		, SUM(DATA.time_2) AS open_time_cnt_2
+		, SUM(DATA.time_3) AS open_time_cnt_3
+		, SUM(DATA.time_4) AS open_time_cnt_4
+		, SUM(DATA.time_5) AS open_time_cnt_5
+		FROM
+		(
+		SELECT
+		CASE WHEN CONVERT(NVARCHAR, log_time, 8) BETWEEN @fr_time_0 AND @to_time_0 THEN 1
+		ELSE 0 END AS time_0
+		, CASE WHEN CONVERT(NVARCHAR, log_time, 8) BETWEEN @fr_time_1 AND @to_time_1 THEN 1
+		ELSE 0 END AS time_1
+		, CASE WHEN CONVERT(NVARCHAR, log_time, 8) BETWEEN @fr_time_2 AND @to_time_2 THEN 1
+		ELSE 0 END AS time_2
+		, CASE WHEN CONVERT(NVARCHAR, log_time, 8) BETWEEN @fr_time_3 AND @to_time_3 THEN 1
+		ELSE 0 END AS time_3
+		, CASE WHEN CONVERT(NVARCHAR, log_time, 8) BETWEEN @fr_time_4 AND @to_time_4 THEN 1
+		ELSE 0 END AS time_4
+		, CASE WHEN CONVERT(NVARCHAR, log_time, 8) BETWEEN @fr_time_5 AND @to_time_5 THEN 1
+		ELSE 0 END AS time_5
+		FROM dbo.TB_CIRCUIT_BREAKER_LOG
+		WHERE log_date = #{occuDate}
+		AND gate_cmd = 1
+		) DATA
+	</select>
+	 -->
+	
+	
+
+
+</mapper>
