@@ -6,8 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>도봉구 mainPage</title>
-
+    <title>mainPage</title>
+    <%-- 하천관리 :: 하천통제 + 수위/유속/유량 --%>
     <%-- echarts --%>
     <script src="/resources/js/echart/echart.min.js"></script>
 
@@ -16,7 +16,7 @@
 
     <%-- css --%>
     <link rel="stylesheet" href="/resources/css/main.css">
-    <%-- <link rel="stylesheet" href="/resources/css/mainHD.css"> --%>
+    <link rel="stylesheet" href="/resources/css/mainHD.css">
     <link rel="stylesheet" href="/resources/css/main4k.css">
 
     <style>
@@ -32,7 +32,7 @@
                     <div class="logoContainer"><img src="/resources/img/logo.png" class="logoIcon" alt=""></div>
                     <div class="dashboardTitleBox">
                         <div class="dashboard">DASHBOARD</div>
-                        <div class="dashboardTitle">하천진출통계</div>
+                        <div class="dashboardTitle">하천관리통계</div>
                     </div>
                 </div>
                 <div class="innerBox04">
@@ -191,7 +191,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="innerBox02 innerBox1">
+                <div class="innerBox02">
                     <div class="chartBox lineChart01">
                         <div class="titleBox">
                             <div class="titleText02">수위/유속/유량 정보</div>

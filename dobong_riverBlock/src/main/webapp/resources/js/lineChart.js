@@ -30,7 +30,7 @@ function lineChart(data) {
         },
         legend: {
             orient: 'vertical',
-            right: 0, // 오른쪽으로 이동
+            right: '1.5%', // 오른쪽으로 이동
             top: 'middle', // 세로 중앙 정렬
             textStyle: {
                 color: '#FFFFF' 
@@ -39,17 +39,37 @@ function lineChart(data) {
         },
         grid: {
             left: '3%',
-            right: '10%',
+            right: '20%',
             bottom: '5%',
             containLabel: true
         },
         xAxis: {
             type: 'category', // x축 타입을 category로 변경
             boundaryGap: false,
-            data: Array.from({ length: 31 }, (_, i) => i + 1) // 1부터 31까지의 배열 생성
+            data: Array.from({ length: 31 }, (_, i) => i + 1), // 1부터 31까지의 배열 생성
+            splitLine: {    // x축의 분할선 설정
+                show: true, // 분할선 표시 여부
+                axisLine: {    // x축에 대한 스타일 설정
+                    lineStyle: {
+                        color: '#CCCCCC',  // 구분선의 색상 설정
+                        width: 1,       // 구분선의 너비 설정
+                        type: 'solid'   // 구분선의 종류 설정 (solid, dashed, dotted 등)
+                    }
+                }
+            }
         },
         yAxis: {
-            type: 'value'
+            type: 'value',
+            splitLine: {    // y축의 분할선 설정
+                show: true, // 분할선 표시 여부
+                axisLine: {    // y축에 대한 스타일 설정
+                    lineStyle: {
+                        color: '#CCCCCC',  // 구분선의 색상 설정
+                        width: 1,       // 구분선의 너비 설정
+                        type: 'solid'   // 구분선의 종류 설정 (solid, dashed, dotted 등)
+                    }
+                },
+            }
         },
         series: cameras.map(camera => {
             const cameraData = Array.from({ length: 31 }, (_, i) => {
