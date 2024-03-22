@@ -1,4 +1,5 @@
 let openGateList; 
+var openCountChart;
 
 function openDounutChart(data){
     openGateList = data.openGateList;
@@ -17,7 +18,7 @@ function openDounutChart(data){
     // console.log("openTimeCnt0", openTimeCnt0 );
     // console.log("시간별 개문 차트");
 
-    var openCountChart = echarts.init(document.getElementById('openCount'));
+    openCountChart = echarts.init(document.getElementById('openCount'));
 
 
     option = {

@@ -1,4 +1,5 @@
 let closeGateList; 
+var closeCountChart;
 
 function closeDounutChart(data){
 
@@ -20,7 +21,7 @@ function closeDounutChart(data){
         closeCountChart.dispose();
     }
 
-    var closeCountChart = echarts.init(document.getElementById('closeCount'));
+    closeCountChart = echarts.init(document.getElementById('closeCount'));
     
     option = {
         legend: {
