@@ -7,30 +7,37 @@ let totalSignalCount = document.getElementById("totalSignalCount");
 let openSignalCount = document.getElementById("openSignalCount");
 let noSignalCount = document.getElementById("noSignalCount");
 
-let gateLiveList;
+let gateLiveList_arry;
 let cameraCount;
-let cameraIpList;
+let cameraIpList_arry;
+let raderLiveList_arry;
 
 
-function liveInfomation(data){
+// function liveInformation(cameraCountResp, cameraIpListResp, gateLiveListResp, raderLiveListResp){
+function liveInformation(cameraCountResp, cameraIpListResp, gateLiveListResp){
+    
+    cameraCount = cameraCountResp.result;
+    cameraIpList_arry = cameraIpListResp.result;
+    gateLiveList_arry = gateLiveListResp.result;
+    // raderLiveList_arry = raderLiveListResp.result;
+    console.log("cameraCount", cameraCount);
+    console.log("cameraIpList_arry", cameraIpList_arry);
+    console.log("gateLiveList_arry", gateLiveList_arry);
+    // console.log("raderLiveList_arry", raderLiveList_arry);
 
-    gateLiveList = data.gateLiveList;
-    cameraCount = data.cameraCount;
-    cameraIpList = data.cameraIpList;
-    console.log("cameraIpList", cameraIpList);
 
-    // console.log("gateLiveList", gateLiveList);
-    // console.log("gateLiveList[0].gateCloseCnt", gateLiveList[0].gateCloseCnt);
-    // console.log("gateLiveList[0].gateDisableCnt", gateLiveList[0].gateDisableCnt);
-    // console.log("gateLiveList[0].gateOpenCnt", gateLiveList[0].gateOpenCnt);
-    // console.log("gateLiveList[0].gateTotalCnt", gateLiveList[0].gateTotalCnt);
-    // console.log("cameraCount", cameraCount);
-    // console.log("cameraIpList", cameraIpList);
+    console.log("gateLiveList_arry[0]", gateLiveList_arry[0]);
+    gateLiveList_arry.forEach((item) => {
 
-    gateTotalCount.innerHTML = `${gateLiveList[0].gateTotalCnt} 개소`;
-    gateOpenCount.innerHTML = `${gateLiveList[0].gateOpenCnt} 개소`;
-    gateCloseCount.innerHTML = `${gateLiveList[0].gateCloseCnt} 개소`;
-    noSignalGateCount.innerHTML = `${gateLiveList[0].gateDisableCnt} 개소`;
+        gateTotalCount.innerHTML = `${item[0]} 개소`;
+        gateOpenCount.innerHTML = `${item[1]} 개소`;
+        gateCloseCount.innerHTML = `${item[2]} 개소`;
+        noSignalGateCount.innerHTML = `${item[3]} 개소`;
+
+    });
+
+
+
     totalSignalCount.innerHTML = `${cameraCount} 개소`;
 
 
@@ -38,23 +45,28 @@ function liveInfomation(data){
     let noCount = 0;
 
     // IP 주소 확인 비동기 처리
-    cameraIpList.forEach((item) => {
-        let ipAddr = item.ipAddr;
+    cameraIpList_arry.forEach((item) => {
+        let ipAddr = item;
         checkPing(ipAddr, (status) => {
             if (status === 200) {
                 okCount++;
             } else {
                 noCount++;
             }
+            // console.log("okCount", okCount);
+            // console.log("noCount", noCount);
+            // console.log("okCount + noCount", okCount + noCount);
 
             // 모든 IP 주소 확인 완료 후 카운트 표시
-            if (okCount + noCount === cameraCount) {
+            if (okCount + noCount == cameraCount) {
                 openSignalCount.innerHTML = `${okCount} CH`;
                 noSignalCount.innerHTML = `${noCount} CH`;
             }
         });
     });
 }
+
+    
 
 function checkPing(ipAddr, callback) {
     var xhr = new XMLHttpRequest();
