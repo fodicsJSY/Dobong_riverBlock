@@ -2,27 +2,13 @@
     var forDate;
     /* 전역변수 끝 */
 
+
     /* 오늘 날짜로 초기화 시작*/
     // 페이지 로드 시 오늘 날짜로 초기화
     document.addEventListener("DOMContentLoaded", ()=> {
-
-        // inputDate 엘리먼트 초기화
-        var inputDate = document.getElementById('inputDate');
-        
-        // forDate 변수 초기화
-        forDate = new Date(inputDate.value);
-
-        // inputDate 엘리먼트 값 변경 이벤트 핸들러 등록
-        inputDate.addEventListener('change', function() {
-            sendToServer(this.value);
-        });
-
-        // 초기화 함수 호출
-        today();
-
-        // 날짜 보내기 
-        sendToServer(forDate);
-
+        console.log("시작");
+        initialize();
+    
     });
     /* 오늘 날짜로 초기화 끝*/
 
@@ -31,42 +17,42 @@
     
     document.getElementById('calenderButton').addEventListener('change', function() {
         inputDate.value = this.value;
-        sendToServer(this.value);
+        sendToServer(savedIP, this.value);
     });
 
 
     document.getElementById('leftBtn').addEventListener("click", ()=>{
         // console.log("leftBtn클릭");
         beforeOneDay();
-        sendToServer();
+        sendToServer(savedIP, forDate);
     });
 
 
     document.getElementById('rightBtn').addEventListener("click", ()=>{
         // console.log("rightBtn클릭");
         afterOneDay();
-        sendToServer();
+        sendToServer(savedIP, forDate);
     });
 
 
     document.getElementById('yesterdayBtn').addEventListener("click", ()=>{
         // console.log("yesterdayBtn클릭");
         yesterday();
-        sendToServer();
+        sendToServer(savedIP, forDate);
     });
 
 
     document.getElementById('todayBtn').addEventListener("click", ()=>{
         // console.log("todayBtn클릭");
         today();
-        sendToServer();
+        sendToServer(savedIP, forDate);
     });
 
 
     document.getElementById('beforeWeekBtn').addEventListener("click", ()=>{
         // console.log("beforeWeekBtn클릭");
         before1weekBtn();
-        sendToServer();
+        sendToServer(savedIP, forDate);
     });
 
 
@@ -131,7 +117,7 @@ function before1weekBtn(){
 // input태그 날짜 직접 입력
 inputDate.addEventListener('keyup', function() {
     // console.log("inputDate 변경됨 : ", this.value);
-    sendToServer(this.value);
+    sendToServer(savedIP, this.value);
 });
 
 
@@ -143,35 +129,23 @@ inputDate.addEventListener('keyup', function() {
 let data;
 
 /* 날짜 보내기 */
-function sendToServer(value) {
+function sendToServer(savedIP, value) {
     // 형식을 YYYYMMDD로 변경
     let occuDate = formatToYYYYMMDD(value || forDate);
     console.log('Sending occuDate to server:', occuDate); // 콘솔에 occuDate 값 로그 출력
-
-
-
-
-
-
-
-
+    console.log('sendToServer savedIP:', savedIP); // 콘솔에 savedIP 값 로그 출력
+    
+    
     // // fetchData2 함수를 호출하고 결과를 처리하는 예제
     (async () => {
         try {
-            await fetchData2();
+            console.log('왜'); // 콘솔에 savedIP 값 로그 출력
+            await fetchData2(savedIP, occuDate);
             // fetchData 함수에서 반환한 데이터를 이용하여 원하는 작업 수행
         } catch (error) {
             console.error('Error occurred:', error);
         }
     })();
-
-
-
-
-
-
-
-
 
 
 
@@ -306,9 +280,11 @@ let selectBox = document.getElementById("selectBox");
 
 
 
-async function fetchData(value) {
+async function fetchData(savedIP, value) {
 
-    var DBip = "172.16.0.93";
+    var DBip = savedIP;
+    console.log('fetchData DBip:', DBip); // 콘솔에 occuDate 값 로그 출력
+
 
     // 형식을 YYYYMMDD로 변경
     let occuDate = formatToYYYYMMDD(value || forDate);
@@ -332,8 +308,8 @@ async function fetchData(value) {
         }
 
         const sendTableQuery = await result1.json();
-        // console.log("sendTableQuery", sendTableQuery);
-        // console.log("result1", result1);
+        console.log("sendTableQuery", sendTableQuery);
+        console.log("result1", result1);
 
         makeTable(sendTableQuery); 
 
@@ -434,9 +410,12 @@ async function fetchData(value) {
 
 
 
-async function fetchData2() {
-    var DBip = "172.16.0.93";
+async function fetchData2(savedIP, occuDate) {
+    console.log('왜2');
+    var DBip = savedIP;
+    console.log('fetchData2 DBip', DBip);
     try {
+        console.log('츄라이');
         const cameraCountResp = await fetch("/cameraCount", {
             method: "POST",
             headers: { "Content-Type": "application/json;" },
@@ -446,6 +425,7 @@ async function fetchData2() {
             })
         }).then(resp => resp.json());
 
+        console.log('츄라이2');
         const cameraIpListResp = await fetch("/cameraIpList", {
             method: "POST",
             headers: { "Content-Type": "application/json;" },
@@ -454,7 +434,7 @@ async function fetchData2() {
                 "query": "SELECT ip_addr FROM TB_CAMERA"
             })
         }).then(resp => resp.json());
-
+        console.log('츄라이3');
 
         const gateLiveListResp = await fetch("/gateLiveList", {
             method: "POST",
@@ -464,7 +444,7 @@ async function fetchData2() {
                 "query": "SELECT SUM(DATA.gate_total) AS gate_total_cnt, SUM(DATA.gate_open) AS gate_open_cnt, SUM(DATA.gate_close) AS gate_close_cnt, SUM(DATA.gate_disable) AS gate_disable_cnt FROM (SELECT 1 AS gate_total, CASE WHEN status = 1 THEN 1 ELSE 0 END AS gate_open	, CASE WHEN status = 0 THEN 1 ELSE 0 END AS gate_close, CASE WHEN status = 0 THEN 0 WHEN  status = 1 THEN 0 ELSE 1 END AS gate_disable FROM TB_CIRCUIT_BREAKER_CONFIG) DATA"
             })
         }).then(resp => resp.json());
-
+        console.log('츄라이4');
 //      레이더 정보(쿼리없음)
         // const raderLiveListResp = await fetch("/raderLiveList", {
         //     method: "POST",
@@ -485,7 +465,7 @@ async function fetchData2() {
             // fetchData 함수를 호출하고 결과를 처리하는 예제
         (async () => {
             try {
-                await fetchData();
+                await fetchData(savedIP, occuDate);
                 // fetchData 함수에서 반환한 데이터를 이용하여 원하는 작업 수행
             } catch (error) {
                 console.error('Error occurred:', error);

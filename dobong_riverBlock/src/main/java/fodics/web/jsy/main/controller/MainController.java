@@ -45,6 +45,19 @@ public class MainController {
 	public String home() {
 		return "main";
 	}
+	
+	
+	// DB IP가져오기 
+	@PostMapping("/ipAddrFetch")
+	@ResponseBody
+	public String ipAddrFetch(
+			@RequestBody  String req
+			) {
+		System.out.println("req: " + req);
+		
+		return req;
+	}
+	
 
 	
 	@PostMapping("/sendDate")
@@ -384,7 +397,7 @@ public class MainController {
 				@RequestBody  String req
 				) {
 			
-//			System.out.println("req: " + req);
+			System.out.println("req: " + req);
 			
 			// MappingJackson2HttpMessageConverter 추가
 			restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -395,8 +408,8 @@ public class MainController {
 			JSONObject jsonObject = new JSONObject(req);
 		    String serverip = jsonObject.getString("serverip");
 		    String query = jsonObject.getString("query");
-//		    System.out.println("serverip : "+ serverip);
-//		    System.out.println("query : "+ query);
+		    System.out.println("serverip : "+ serverip);
+		    System.out.println("query : "+ query);
 			
 		    String url = "http://172.16.103.34:8988/fnvr/request/query/select"; // 외부 RESTful API의 URL select
 	       
@@ -406,7 +419,7 @@ public class MainController {
 	       Map<String, String> requestBody = new LinkedHashMap<>();
 	       requestBody.put("serverip", serverip);
 	       requestBody.put("query", query);
-//	       System.out.println("requestBody : "+ requestBody);
+	       System.out.println("requestBody : "+ requestBody);
 
 	       // 요청 헤더 설정
 	       HttpHeaders headers = new HttpHeaders();
