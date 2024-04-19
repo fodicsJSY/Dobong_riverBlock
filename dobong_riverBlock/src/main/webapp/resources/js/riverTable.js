@@ -15,9 +15,12 @@ function reiverMakeTable(data){
     var riverTableContainer = document.getElementById("riverTableContainer");
     riverTableContainer.innerHTML = ""; // Clear previous data
 
+    var div = document.createElement("div");
+    tableContainer.appendChild(div);
+
     var gateTable = document.createElement("table");
     gateTable.className = "gateTable";
-    riverTableContainer.appendChild(gateTable);
+    div.appendChild(gateTable);
 
     var gateThead = document.createElement("thead");
     gateThead.className = "gateThead";

@@ -643,6 +643,10 @@
 
     .tableContainer{
         width: 100%;
+    }
+
+    .tableContainer>div{
+        max-height: 508px;
         overflow-y: auto; /* 수직 스크롤을 표시합니다. */
     }
 
@@ -719,6 +723,12 @@
 
 
     /****************** 수위/유속/유량 현황 테이블 시작 *******************/
+
+    .riverTableContainer>div{
+        max-height: 507px;
+        overflow-y: auto; /* 수직 스크롤을 표시합니다. */
+    }
+
 
     
     /* 위치 */

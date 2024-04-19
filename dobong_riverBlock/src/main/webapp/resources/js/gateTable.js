@@ -9,9 +9,14 @@ function makeTable(sendTableQuery){
     var tableContainer = document.querySelector(".tableContainer");
     tableContainer.innerHTML = ""; // Clear previous data
 
+
+    var div = document.createElement("div");
+    tableContainer.appendChild(div);
+
+
     var gateTable = document.createElement("table");
     gateTable.className = "gateTable";
-    tableContainer.appendChild(gateTable);
+    div.appendChild(gateTable);
 
     var gateThead = document.createElement("thead");
     gateThead.className = "gateThead";
@@ -41,49 +46,48 @@ function makeTable(sendTableQuery){
         console.log("item[2]", item[2]);
 
 
-            var tr = document.createElement("tr");
-            gateTbody.appendChild(tr);
-            createCell(tr, "td", "gatetd", item[0]);
+        var tr = document.createElement("tr");
+        gateTbody.appendChild(tr);
+        createCell(tr, "td", "gatetd", item[0]);
 
-            var div1 = document.createElement("div");
-            div1.className = "gateIconBox";
-            tr.appendChild(div1);
+        var div1 = document.createElement("div");
+        div1.className = "gateIconBox";
+        tr.appendChild(div1);
 
-            let gateImg =  document.createElement("img");
-            gateImg.className = "gateIcon";
+        let gateImg =  document.createElement("img");
+        gateImg.className = "gateIcon";
 
-            
-            // console.log("item.gateStatus : ", item.gateStatus );
-            
+        
+        // console.log("item.gateStatus : ", item.gateStatus );
+        
 
-            if(item[1] == 'close'){
-                gateImg.src = "/resources/img/iconBTN_GateClose.png";
-            }
-            if(item[1] == 'open'){
-                gateImg.src = "/resources/img/iconBTN_GateOpen.png";
-            }
-            div1.appendChild(gateImg);
-            
-            if(item[1] == ''){
-                div1.innerHTML = "-";
-            }
+        if(item[1] == 'close'){
+            gateImg.src = "/resources/img/iconBTN_GateClose.png";
+        }
+        if(item[1] == 'open'){
+            gateImg.src = "/resources/img/iconBTN_GateOpen.png";
+        }
+        div1.appendChild(gateImg);
+        
+        if(item[1] == ''){
+            div1.innerHTML = "-";
+        }
 
-            
-            let signalImg =  document.createElement("img");
-            signalImg.className = "signalIcon";
+        
+        let signalImg =  document.createElement("img");
+        signalImg.className = "signalIcon";
 
-            // console.log("item.commStatus : ", item.commStatus );
-            if(item[2] == 'on'){
-                signalImg.src = "/resources/img/connect-signalOK.png";
-            }
-            if(item[2] == 'off'){
-                signalImg.src = "/resources/img/connect-signalNO.png";
-            }
+        // console.log("item.commStatus : ", item.commStatus );
+        if(item[2] == 'on'){
+            signalImg.src = "/resources/img/connect-signalOK.png";
+        }
+        if(item[2] == 'off'){
+            signalImg.src = "/resources/img/connect-signalNO.png";
+        }
 
-            // createCell(tr, "td", "gatetd", data);
-            createCell(tr, "td", "gatetd gate", div1);
-            createCell(tr, "td", "gatetd", signalImg.outerHTML);
-            
+        // createCell(tr, "td", "gatetd", data);
+        createCell(tr, "td", "gatetd gate", div1);
+        createCell(tr, "td", "gatetd", signalImg.outerHTML);
     });
 }
 
