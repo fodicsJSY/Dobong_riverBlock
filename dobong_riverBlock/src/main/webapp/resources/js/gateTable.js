@@ -60,7 +60,6 @@ function makeTable(sendTableQuery){
         
         // console.log("item.gateStatus : ", item.gateStatus );
         
-
         if(item[1] == 'close'){
             gateImg.src = "/resources/img/iconBTN_GateClose.png";
         }
@@ -69,9 +68,10 @@ function makeTable(sendTableQuery){
         }
         div1.appendChild(gateImg);
         
-        if(item[1] == ''){
+        if(item[1] == 'disconnected'){
             div1.innerHTML = "-";
         }
+
 
         
         let signalImg =  document.createElement("img");

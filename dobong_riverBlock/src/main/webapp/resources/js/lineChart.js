@@ -46,7 +46,7 @@ function lineChart(data) {
         xAxis: {
             type: 'category', // x축 타입을 category로 변경
             boundaryGap: false,
-            data: Array.from({ length: 31 }, (_, i) => i + 1), // 1부터 31까지의 배열 생성
+            data: Array.from({ length: 24 }, (_, i) => i + 1), // 1부터 31까지의 배열 생성
             splitLine: {    // x축의 분할선 설정
                 show: true, // 분할선 표시 여부
                 axisLine: {    // x축에 대한 스타일 설정
@@ -72,7 +72,7 @@ function lineChart(data) {
             }
         },
         series: cameras.map(camera => {
-            const cameraData = Array.from({ length: 31 }, (_, i) => {
+            const cameraData = Array.from({ length: 24 }, (_, i) => {
                 const currentDate = i + 1;
                 const matchingEntry = daliyCountList.find(entry => {
                     const entryDate = new Date(entry.logDate).getDate();

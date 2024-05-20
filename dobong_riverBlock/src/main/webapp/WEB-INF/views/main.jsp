@@ -205,9 +205,9 @@
                                 <div class="cbBoxContainer">
                                     <select name="조회조건" class="comboBox" id="selectBox">
                                         <option value="top10"> TOP 10 </option>
-                                        <option value=""></option>
-                                        <option value=""></option>
-                                        <option value=""></option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
                                     </select>
                                 </div>
                             </div>
@@ -255,13 +255,13 @@
 
     <%-- js --%>
     <script src="/resources/js/date.js"></script>
+    <script src="/resources/js/openCountChart.js"></script>
+    <script src="/resources/js/closeCountChart.js"></script>
     <script src="/resources/js/gateTable.js"></script>
-    <script src="/resources/js/riverTable.js"></script>
+    <%-- <script src="/resources/js/riverTable.js"></script> --%>
     <script src="/resources/js/liveInfo.js"></script>
     <script src="/resources/js/lineChart.js"></script>
     <%-- <script src="/resources/js/refresh.js"></script> --%>
-    <script src="/resources/js/openCountChart.js"></script>
-    <script src="/resources/js/closeCountChart.js"></script>
     <script src="/resources/js/main.js"></script>
     <script src="/resources/js/dbSetting.js"></script>
 

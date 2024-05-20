@@ -3,15 +3,15 @@ var closeCountChart;
 
 function closeDounutChart(data){
 
-    closeGateList = data.closeGateList;
+    closeGateList = data.result;
     // console.log("closeGateList", closeGateList );
 
-    let closeTimeCnt0 = closeGateList[0].closeTimeCnt0;
-    let closeTimeCnt1 = closeGateList[0].closeTimeCnt1;
-    let closeTimeCnt2 = closeGateList[0].closeTimeCnt2;
-    let closeTimeCnt3 = closeGateList[0].closeTimeCnt3;
-    let closeTimeCnt4 = closeGateList[0].closeTimeCnt4;
-    let closeTimeCnt5 = closeGateList[0].closeTimeCnt5;
+    let closeTimeCnt0 = closeGateList[0][0];
+    let closeTimeCnt1 = closeGateList[0][1];
+    let closeTimeCnt2 = closeGateList[0][2];
+    let closeTimeCnt3 = closeGateList[0][3];
+    let closeTimeCnt4 = closeGateList[0][4];
+    let closeTimeCnt5 = closeGateList[0][5];
     // console.log("closeTimeCnt0", closeTimeCnt0 );
 
     // console.log("시간별 폐문 차트");
