@@ -29,8 +29,7 @@ function liveInformation(liveDataList01){
         gateCloseCount.innerHTML = `${gateLive[1]} 개소`;
         noSignalGateCount.innerHTML = `${gateLive[2]} 개소`;
     
-    
-    
+
         // 카메라 정보
         // totalSignalCount.innerHTML = `${cameraCount} 개소`;
     

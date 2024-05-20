@@ -41,9 +41,9 @@ function makeTable(sendTableQuery){
 
     // 데이터 삽입
     tableDataList.forEach(function (item) {    
-        console.log("item[0]", item[0]);
-        console.log("item[1]", item[1]);
-        console.log("item[2]", item[2]);
+        // console.log("item[0]", item[0]);
+        // console.log("item[1]", item[1]);
+        // console.log("item[2]", item[2]);
 
 
         var tr = document.createElement("tr");

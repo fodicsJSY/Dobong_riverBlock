@@ -442,9 +442,6 @@ async function fetchData(savedIP, occuDate) {
 
 
 
-
-        
-
         // Query 5 호출
         const result5 = await fetch("/liveDataList", {
             method: "POST",
@@ -495,13 +492,6 @@ async function fetchData(savedIP, occuDate) {
 
 
 
-
-
-
-
-
-
-
         // 라디오 버튼 상태 확인
         if (waterLevelRadio.checked) {
             radioSelected = 1;
@@ -540,12 +530,7 @@ async function fetchData(savedIP, occuDate) {
         console.log("Some other endpoint", sendLineQuery);
 
 
-
-
-
         // 이와 같이 필요한 만큼 fetch 호출을 추가할 수 있습니다.
-
-
 
 
 

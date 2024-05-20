@@ -666,7 +666,7 @@ public class MainController {
 		
 		
 		
-		/* ↓↓↓↓↓↓↓↓ 프로시저와 쿼리문 받으면 수정해야 함 ↓↓↓↓↓↓↓↓↓ */
+		/* ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 프로시저와 쿼리문 받으면 수정해야 함 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ */
 		
 		
 		
@@ -677,7 +677,7 @@ public class MainController {
 				@RequestBody  String req
 				) {
 			
-//			System.out.println("라인차트 req: " + req);
+			System.out.println("라인차트 req: " + req);
 			
 			// MappingJackson2HttpMessageConverter 추가
 //			restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
