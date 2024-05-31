@@ -1,10 +1,10 @@
 let daliyCountList;
 let dateDataChart; 
 
-function lineChart(data) {
-    daliyCountList = data.daliyCountList;
+function lineChart(result) {
+    daliyCountList = result.result;
 
-    // console.log("daliyCountList", daliyCountList);
+    console.log("daliyCountList : ", daliyCountList);
     // console.log("일별 구동 차트");
 
     // 이전에 있던 차트 객체가 있으면 삭제

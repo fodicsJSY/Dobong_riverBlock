@@ -74,7 +74,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="innerBox05">
+                <%-- <div class="innerBox05">
                     <div class="leftTitleBox01" >
                         <div class="leftImgContainer"><img src="/resources/img/iconList_cctv.png" class="cctvIcon" alt=""></div>
                         <div class="leftTitle">카메라정보</div>
@@ -94,13 +94,13 @@
                             </div>
                             <div class="dataCount"><span id="openSignalCount"><span></div>
                         </div>
-                        <%-- <div class="leftDataBox dataSection">
+                        <div class="leftDataBox dataSection">
                             <div class="dataStatsBox">
                                 <div class="dataStatsImgBox"><img src="/resources/img/connect-signalNO.png" class="dataStatsImg" alt=""></div>
                                 <div class="dataStats">끊어짐</div>
                             </div>
                             <div class="dataCount"><span id="closeSignalCount">99<span>CH</div>
-                        </div> --%>
+                        </div>
                         <div class="leftDataBox01 dataSection">
                             <div class="dataStatsBox">
                                 <div class="dataStatsImgBox"><img src="/resources/img/connect-signalBAD.png" class="dataStatsImg" alt=""></div>
@@ -130,13 +130,13 @@
                             </div>
                             <div class="dataCount"><span id="openSignalCount"><span></div>
                         </div>
-                        <%-- <div class="leftDataBox dataSection">
+                        <div class="leftDataBox dataSection">
                             <div class="dataStatsBox">
                                 <div class="dataStatsImgBox"><img src="/resources/img/connect-signalNO.png" class="dataStatsImg" alt=""></div>
                                 <div class="dataStats">끊어짐</div>
                             </div>
                             <div class="dataCount"><span id="closeSignalCount">99<span>CH</div>
-                        </div> --%>
+                        </div>
                         <div class="leftDataBox01 dataSection">
                             <div class="dataStatsBox">
                                 <div class="dataStatsImgBox"><img src="/resources/img/connect-signalBAD.png" class="dataStatsImg" alt=""></div>
@@ -145,7 +145,7 @@
                             <div class="dataCount"><span id="noSignalCount"><span></div>
                         </div>
                     </div>
-                </div>
+                </div> --%>
             </div>
         </div>
         <div class="sectionBox2" >
@@ -203,19 +203,19 @@
                             <div class="titleText02">수위/유속/유량 정보</div>
                             <div class="comboBoxContainer">
                                 <div class="cbBoxContainer">
-                                    <select name="조회조건" class="comboBox" id="selectBox">
-                                        <option value="top10"> TOP 10 </option>
+                                    <select name="searchCondition" class="comboBox" id="selectBox" onchange="handleSelectChange();">
+                                        <%-- <option value="top10"> TOP 10 </option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
-                                        <option value="3">3</option>
+                                        <option value="3">3</option> --%>
                                     </select>
                                 </div>
                             </div>
-                            <div class="titleText03">
-                                <input type="radio" name="select" id="waterLevel" class="option" checked> <label for="waterLevel" class="label">수위</label>
-                                <input type="radio" name="select" id="flowRate" class="option"> <label for="flowRate" class="label">유속</label>
-                                <input type="radio" name="select" id="streamFlow" class="option"> <label for="streamFlow" class="label">유량</label>
-                            </div>
+                            <%-- <div class="titleText03">
+                                <input type="radio" name="select" id="waterLevel" class="option" value="수위" checked> <label for="waterLevel" class="label">수위</label>
+                                <input type="radio" name="select" id="flowRate" class="option" value="유속" > <label for="flowRate" class="label">유속</label>
+                                <input type="radio" name="select" id="streamFlow" class="option" value="유량" > <label for="streamFlow" class="label">유량</label>
+                            </div> --%>
                         </div>
                         <div class="dateDataBox">
                             <div id="dateData" style="width: 100%; height: 100%;">
@@ -255,15 +255,16 @@
 
     <%-- js --%>
     <script src="/resources/js/date.js"></script>
+    <script src="/resources/js/top10LineChart.js"></script>
     <script src="/resources/js/openCountChart.js"></script>
     <script src="/resources/js/closeCountChart.js"></script>
     <script src="/resources/js/gateTable.js"></script>
-    <script src="/resources/js/riverTable.js"></script>
     <script src="/resources/js/liveInfo.js"></script>
-    <script src="/resources/js/lineChart.js"></script>
-    <%-- <script src="/resources/js/refresh.js"></script> --%>
+    <script src="/resources/js/refresh.js"></script>
     <script src="/resources/js/main.js"></script>
+    <script src="/resources/js/select.js"></script>
     <script src="/resources/js/dbSetting.js"></script>
+    <script src="/resources/js/riverTable.js"></script>
 
 </body>
 </html>

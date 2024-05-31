@@ -68,6 +68,7 @@ async function initialize() {
 
     (async () => {
         try {
+            // takeOption();
             sendToServer(savedIP, forDate);
             // fetchData 함수에서 반환한 데이터를 이용하여 원하는 작업 수행
         } catch (error) {

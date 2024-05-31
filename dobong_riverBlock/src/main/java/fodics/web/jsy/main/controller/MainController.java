@@ -55,12 +55,80 @@ public class MainController {
 	public String ipAddrFetch(
 			@RequestBody  String req
 			) {
-		System.out.println("req: " + req);
+//		System.out.println("req: " + req);
 		
 		return req;
 	}
 	
+	
+	// 라인차드 combo option값 가져오기 
+	@PostMapping(value="/comboData", produces="text/plain; charset=UTF-8")
+	@ResponseBody
+	public String comboData(
+			@RequestBody  String req
+			) {
+//		System.out.println("req: " + req);
+		
+	 	String ipAddress;
+	    String port;
 
+	    // MappingJackson2HttpMessageConverter 추가
+	    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+	    try {
+	    	InputStream is = getClass().getResourceAsStream("/server_info.ini");
+	        Scanner s = new Scanner(is);
+	        ipAddress = s.nextLine();
+	        port = s.nextLine();
+//	        System.out.println("comboData ipAddress : "+ ipAddress);
+//	        System.out.println("comboData port : "+ port);
+	        s.close();
+	        is.close();
+
+	        // JSON 문자열을 파싱하여 필요한 변수에 할당
+	        JSONObject jsonObject = new JSONObject(req);
+	        String serverip = jsonObject.getString("serverip");
+	        String query = jsonObject.getString("query");
+//            System.out.println("comboData serverip : "+ serverip);
+//            System.out.println("comboData query : "+ query);
+
+	        String select_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/select"; // 외부 RESTful API의 URL select
+//	        System.out.println("comboData url : "+ select_url);
+
+	        // 서버로 전송할 객체 생성
+	        Map<String, String> requestBody = new LinkedHashMap<>();
+	        requestBody.put("query", query);
+	        requestBody.put("serverip", serverip);
+//	        System.out.println("comboData requestBody : "+ requestBody);
+
+	        // 요청 헤더 설정
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.setContentType(MediaType.APPLICATION_JSON);
+
+	        // HttpEntity 생성
+	        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+
+	        // post 요청 보내기
+	        String select_url_resp = restTemplate.postForObject(select_url, requestEntity, String.class);
+
+//	        System.out.println("select_url_resp"+ select_url_resp);
+	        
+	        // 응답 데이터를 클라이언트에 반환
+	        return select_url_resp;
+	        
+	        
+	        
+	    } catch (Exception e) {
+	       //  //  System.out.println("Read Query Error");
+	        e.printStackTrace();
+	        return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
+	    }
+	}
+	
+
+	
+	
+	
 	
 	@PostMapping("/sendDate")
 	@ResponseBody
@@ -84,165 +152,17 @@ public class MainController {
 	}
 	
 	
+
 	
-	
-	   // Query 1 호출
-		// 개문횟수 
-		@PostMapping("/openDataList")
-		@ResponseBody
-		public String openGateListData(
-				@RequestBody  String req
-				) {
-//			     System.out.println("openGate req: " + req);
 
-			    String ipAddress;
-			    String port;
-
-			    // MappingJackson2HttpMessageConverter 추가
-			    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
-			    try {
-			    	InputStream is = getClass().getResourceAsStream("/server_info.ini");
-			        Scanner s = new Scanner(is);
-			        ipAddress = s.nextLine();
-			        port = s.nextLine();
-//			        System.out.println("openGate ipAddress : "+ ipAddress);
-//			        System.out.println("openGate port : "+ port);
-			        s.close();
-			        is.close();
-
-			        // JSON 문자열을 파싱하여 필요한 변수에 할당
-			        JSONObject jsonObject = new JSONObject(req);
-			        String occuDate = jsonObject.getString("occuDate");
-			        String serverip = jsonObject.getString("serverip");
-			        String query = jsonObject.getString("query");
-//		            System.out.println("openGate occuDate : "+ occuDate);
-//		            System.out.println("openGate serverip : "+ serverip);
-//		            System.out.println("openGate query : "+ query);
-
-			        String execute_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/execute"; // 외부 RESTful API의 URL select
-//			        System.out.println("openGate url : "+ execute_url);
-
-			        // 서버로 전송할 객체 생성
-			        Map<String, String> requestBody = new LinkedHashMap<>();
-			        requestBody.put("occuDate", occuDate);
-			        requestBody.put("query", query);
-			        requestBody.put("serverip", serverip);
-//			        System.out.println("openGate requestBody : "+ requestBody);
-
-			        // 요청 헤더 설정
-			        HttpHeaders headers = new HttpHeaders();
-			        headers.setContentType(MediaType.APPLICATION_JSON);
-
-			        // HttpEntity 생성
-			        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
-
-			        // post 요청 보내기
-			        String execute_url_resp = restTemplate.postForObject(execute_url, requestEntity, String.class);
-
-//			        System.out.print("execute_url_resp"+ execute_url_resp);
-			        
-			        // 응답 데이터를 클라이언트에 반환
-			        return execute_url_resp;
-			        
-			        
-			        
-			    } catch (Exception e) {
-			       //  //  System.out.println("Read Query Error");
-			        e.printStackTrace();
-			        return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
-			    }
-			
-		}
-		
-		
-		
-		
-		
-		// Query 1 받기
-		// 개문횟수 
-		@PostMapping("/openDataList01")
-		@ResponseBody
-		public String openGateListData01(
-				@RequestBody  String req
-				) {
-//			 System.out.println("openGate01 req: " + req);
-			
-			String ipAddress;
-			String port;
-			
-			// MappingJackson2HttpMessageConverter 추가
-			restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-			
-			try {
-				InputStream is = getClass().getResourceAsStream("/server_info.ini");
-				Scanner s = new Scanner(is);
-				ipAddress = s.nextLine();
-				port = s.nextLine();
-//				System.out.println("openGate01 ipAddress : "+ ipAddress);
-//				System.out.println("openGate01 port : "+ port);
-				s.close();
-				is.close();
-				
-				// JSON 문자열을 파싱하여 필요한 변수에 할당
-				JSONObject jsonObject = new JSONObject(req);
-				String occuDate = jsonObject.getString("occuDate");
-				String serverip = jsonObject.getString("serverip");
-				String query = jsonObject.getString("query");
-//				System.out.println("openGate01 occuDate : "+ occuDate);
-//				System.out.println("openGate01 serverip : "+ serverip);
-//				System.out.println("openGate01 query : "+ query);
-				
-				String select_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/select"; // 외부 RESTful API의 URL select
-//				System.out.println("openGate url : "+ select_url);
-				
-				// 서버로 전송할 객체 생성
-				Map<String, String> requestBody = new LinkedHashMap<>();
-				requestBody.put("occuDate", occuDate);
-				requestBody.put("query", query);
-				requestBody.put("serverip", serverip);
-//				System.out.println("openGate01 requestBody : "+ requestBody);
-				
-				// 요청 헤더 설정
-				HttpHeaders headers = new HttpHeaders();
-				headers.setContentType(MediaType.APPLICATION_JSON);
-				
-				// HttpEntity 생성
-				HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
-				
-				// post 요청 보내기
-				String select_url_resp = restTemplate.postForObject(select_url, requestEntity, String.class);
-				
-//				System.out.print("select_url_resp"+ select_url_resp);
-				
-				// 응답 데이터를 클라이언트에 반환
-				return select_url_resp;
-				
-				
-				
-			} catch (Exception e) {
-				//  System.out.println("Read Query Error");
-				e.printStackTrace();
-				return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
-			}
-			
-		}
-		
-		
-		
-		
-		
-		
-		
-		 // Query 2 호출
-		// 폐문횟수 
-		@PostMapping("/closeDataList")
-		@ResponseBody
-		public String closeGateListData(
-				@RequestBody  String req
-				) {
-			
-//			System.out.println("closeGate req: " + req);
+    // Query 1 호출
+	// 개문횟수 
+	@PostMapping("/openDataList")
+	@ResponseBody
+	public String openGateListData(
+			@RequestBody  String req
+			) {
+//		     System.out.println("openGate req: " + req);
 
 		    String ipAddress;
 		    String port;
@@ -255,8 +175,8 @@ public class MainController {
 		        Scanner s = new Scanner(is);
 		        ipAddress = s.nextLine();
 		        port = s.nextLine();
-//		        System.out.println("closeGate ipAddress : "+ ipAddress);
-//		        System.out.println("closeGate port : "+ port);
+//		        System.out.println("openGate ipAddress : "+ ipAddress);
+//		        System.out.println("openGate port : "+ port);
 		        s.close();
 		        is.close();
 
@@ -265,19 +185,19 @@ public class MainController {
 		        String occuDate = jsonObject.getString("occuDate");
 		        String serverip = jsonObject.getString("serverip");
 		        String query = jsonObject.getString("query");
-//	            System.out.println("closeGate occuDate : "+ occuDate);
-//	            System.out.println("closeGate serverip : "+ serverip);
-//	            System.out.println("closeGate query : "+ query);
+//	            System.out.println("openGate occuDate : "+ occuDate);
+//	            System.out.println("openGate serverip : "+ serverip);
+//	            System.out.println("openGate query : "+ query);
 
 		        String execute_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/execute"; // 외부 RESTful API의 URL select
-//		        System.out.println("closeGate url : "+ execute_url);
+//		        System.out.println("openGate url : "+ execute_url);
 
 		        // 서버로 전송할 객체 생성
 		        Map<String, String> requestBody = new LinkedHashMap<>();
 		        requestBody.put("occuDate", occuDate);
 		        requestBody.put("query", query);
 		        requestBody.put("serverip", serverip);
-//		        System.out.println("closeGate requestBody : "+ requestBody);
+//		        System.out.println("openGate requestBody : "+ requestBody);
 
 		        // 요청 헤더 설정
 		        HttpHeaders headers = new HttpHeaders();
@@ -297,26 +217,404 @@ public class MainController {
 		        
 		        
 		    } catch (Exception e) {
-//		        System.out.println("Read Query Error");
+		       //  //  System.out.println("Read Query Error");
 		        e.printStackTrace();
 		        return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
 		    }
 		
+	}
+	
+	
+	
+	
+	
+	
+	
+	// Query 1 받기
+	// 개문횟수 
+	@PostMapping("/openDataList01")
+	@ResponseBody
+	public String openGateListData01(
+			@RequestBody  String req
+			) {
+//		 System.out.println("openGate01 req: " + req);
+		
+		String ipAddress;
+		String port;
+		
+		// MappingJackson2HttpMessageConverter 추가
+		restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+		
+		try {
+			InputStream is = getClass().getResourceAsStream("/server_info.ini");
+			Scanner s = new Scanner(is);
+			ipAddress = s.nextLine();
+			port = s.nextLine();
+//			System.out.println("openGate01 ipAddress : "+ ipAddress);
+//			System.out.println("openGate01 port : "+ port);
+			s.close();
+			is.close();
+			
+			// JSON 문자열을 파싱하여 필요한 변수에 할당
+			JSONObject jsonObject = new JSONObject(req);
+			String occuDate = jsonObject.getString("occuDate");
+			String serverip = jsonObject.getString("serverip");
+			String query = jsonObject.getString("query");
+//			System.out.println("openGate01 occuDate : "+ occuDate);
+//			System.out.println("openGate01 serverip : "+ serverip);
+//			System.out.println("openGate01 query : "+ query);
+			
+			String select_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/select"; // 외부 RESTful API의 URL select
+//			System.out.println("openGate url : "+ select_url);
+			
+			// 서버로 전송할 객체 생성
+			Map<String, String> requestBody = new LinkedHashMap<>();
+			requestBody.put("occuDate", occuDate);
+			requestBody.put("query", query);
+			requestBody.put("serverip", serverip);
+//			System.out.println("openGate01 requestBody : "+ requestBody);
+			
+			// 요청 헤더 설정
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			
+			// HttpEntity 생성
+			HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+			
+			// post 요청 보내기
+			String select_url_resp = restTemplate.postForObject(select_url, requestEntity, String.class);
+			
+//			System.out.print("select_url_resp"+ select_url_resp);
+			
+			// 응답 데이터를 클라이언트에 반환
+			return select_url_resp;
+			
+			
+			
+		} catch (Exception e) {
+			//  System.out.println("Read Query Error");
+			e.printStackTrace();
+			return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
 		}
 		
+	}
+	
+	
+	
+	
+    // Query 2 호출
+	// 폐문횟수 
+	@PostMapping("/closeDataList")
+	@ResponseBody
+	public String closeGateListData(
+			@RequestBody  String req
+			) {
+		
+		//  //  System.out.println("closeGate req: " + req);
+
+	    String ipAddress;
+	    String port;
+
+	    // MappingJackson2HttpMessageConverter 추가
+	    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+	    try {
+	    	InputStream is = getClass().getResourceAsStream("/server_info.ini");
+	        Scanner s = new Scanner(is);
+	        ipAddress = s.nextLine();
+	        port = s.nextLine();
+	       //  //  System.out.println("closeGate ipAddress : "+ ipAddress);
+	       //  //  System.out.println("closeGate port : "+ port);
+	        s.close();
+	        is.close();
+
+	        // JSON 문자열을 파싱하여 필요한 변수에 할당
+	        JSONObject jsonObject = new JSONObject(req);
+	        String occuDate = jsonObject.getString("occuDate");
+	        String serverip = jsonObject.getString("serverip");
+	        String query = jsonObject.getString("query");
+	       //  //  System.out.println("closeGate occuDate : "+ occuDate);
+	       //  //  System.out.println("closeGate serverip : "+ serverip);
+	       //  //  System.out.println("closeGate query : "+ query);
+
+	        String execute_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/execute"; // 외부 RESTful API의 URL select
+	       //  //  System.out.println("closeGate url : "+ execute_url);
+
+	        // 서버로 전송할 객체 생성
+	        Map<String, String> requestBody = new LinkedHashMap<>();
+	        requestBody.put("occuDate", occuDate);
+	        requestBody.put("query", query);
+	        requestBody.put("serverip", serverip);
+	       //  //  System.out.println("closeGate requestBody : "+ requestBody);
+
+	        // 요청 헤더 설정
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.setContentType(MediaType.APPLICATION_JSON);
+
+	        // HttpEntity 생성
+	        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+
+	        // post 요청 보내기
+	        String execute_url_resp = restTemplate.postForObject(execute_url, requestEntity, String.class);
+
+	       //  //  System.out.print("execute_url_resp"+ execute_url_resp);
+	        
+	        // 응답 데이터를 클라이언트에 반환
+	        return execute_url_resp;
+	        
+	        
+	        
+	    } catch (Exception e) {
+	       //  //  System.out.println("Read Query Error");
+	        e.printStackTrace();
+	        return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
+	    }
+	
+	}
+	
+	
+	
+	
+	
+	
+	
+	// Query 2 받기
+	// 폐문횟수 
+	@PostMapping("/closeDataList01")
+	@ResponseBody
+	public String closeGateListData01(
+			@RequestBody  String req
+			) {
+		
+		//  System.out.println("closeGate01 req: " + req);
+		
+		String ipAddress;
+		String port;
+		
+		// MappingJackson2HttpMessageConverter 추가
+		restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+		
+		try {
+			InputStream is = getClass().getResourceAsStream("/server_info.ini");
+			Scanner s = new Scanner(is);
+			ipAddress = s.nextLine();
+			port = s.nextLine();
+			//  System.out.println("closeGate01 ipAddress : "+ ipAddress);
+			//  System.out.println("closeGate01 port : "+ port);
+			s.close();
+			is.close();
+			
+			// JSON 문자열을 파싱하여 필요한 변수에 할당
+			JSONObject jsonObject = new JSONObject(req);
+			String occuDate = jsonObject.getString("occuDate");
+			String serverip = jsonObject.getString("serverip");
+			String query = jsonObject.getString("query");
+			//  System.out.println("closeGate01 occuDate : "+ occuDate);
+			//  System.out.println("closeGate01 serverip : "+ serverip);
+			//  System.out.println("closeGate01 query : "+ query);
+			
+			String select_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/select"; // 외부 RESTful API의 URL select
+			//  System.out.println("closeGate01 url : "+ select_url);
+			
+			// 서버로 전송할 객체 생성
+			Map<String, String> requestBody = new LinkedHashMap<>();
+			requestBody.put("occuDate", occuDate);
+			requestBody.put("query", query);
+			requestBody.put("serverip", serverip);
+			//  System.out.println("closeGate01 requestBody : "+ requestBody);
+			
+			// 요청 헤더 설정
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			
+			// HttpEntity 생성
+			HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+			
+			// post 요청 보내기
+			String select_url_resp = restTemplate.postForObject(select_url, requestEntity, String.class);
+			
+			//  System.out.print("select_url_resp"+ select_url_resp);
+			
+			// 응답 데이터를 클라이언트에 반환
+			return select_url_resp;
+			
+			
+			
+		} catch (Exception e) {
+			//  System.out.println("Read Query Error");
+			e.printStackTrace();
+			return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
+		}
+		
+	}
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
 		
 
+    // Query 3 호출
+	//테이블
+	@PostMapping("/tableDataList")
+	@ResponseBody
+	public String tableData(
+			@RequestBody  String req
+			) {
 		
-		// Query 2 받기
-		// 폐문횟수 
-		@PostMapping("/closeDataList01")
-		@ResponseBody
-		public String closeGateListData01(
-				@RequestBody  String req
-				) {
+//	    System.out.println("tableData req: " + req);
+		
+		String ipAddress;
+		String port;
+		
+		// MappingJackson2HttpMessageConverter 추가
+		restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+		
+		try {
+			InputStream is = getClass().getResourceAsStream("/server_info.ini");
+			Scanner s = new Scanner(is);
+			ipAddress = s.nextLine();
+			port = s.nextLine();
+//		    System.out.println("tableData ipAddress : "+ ipAddress);
+//		    System.out.println("tableData port : "+ port);
+			s.close();
+			is.close();
 			
-//			System.out.println("closeGate01 req: " + req);
+			// JSON 문자열을 파싱하여 필요한 변수에 할당
+			JSONObject jsonObject = new JSONObject(req);
+			String serverip = jsonObject.getString("serverip");
+			String query = jsonObject.getString("query");
+//			System.out.println("tableData serverip : "+ serverip);
+//			System.out.println("tableData query : "+ query);
 			
+			String execute_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/execute"; // 외부 RESTful API의 URL execute
+//			System.out.println("tableData url : "+ execute_url);
+			
+			// 서버로 전송할 객체 생성
+			Map<String, String> requestBody = new LinkedHashMap<>();
+			requestBody.put("query", query);
+			requestBody.put("serverip", serverip);
+//			System.out.println("tableData requestBody : "+ requestBody);
+			
+			// 요청 헤더 설정
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			
+			// HttpEntity 생성
+			HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+			
+			// post 요청 보내기
+			String execute_url_resp = restTemplate.postForObject(execute_url, requestEntity, String.class);
+			
+//			System.out.print("execute_url_resp"+ execute_url_resp);
+			
+			// 응답 데이터를 클라이언트에 반환
+			return execute_url_resp;
+			
+			
+			
+		} catch (Exception e) {
+			//  System.out.println("Read Query Error");
+			e.printStackTrace();
+			return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
+		}
+	}
+	
+	
+	
+		
+		
+	
+	
+	
+	// Query 3 받기
+	//테이블
+	@PostMapping(value="/tableDataList01", produces="text/plain; charset=UTF-8")
+	@ResponseBody
+	public String tableData01(
+			@RequestBody  String req
+			) {
+		
+//	   System.out.println("tableData01 req: " + req);
+		
+		String ipAddress;
+		String port;
+		
+		// MappingJackson2HttpMessageConverter 추가
+		restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+		
+		try {
+			InputStream is = getClass().getResourceAsStream("/server_info.ini");
+			Scanner s = new Scanner(is);
+			ipAddress = s.nextLine();
+			port = s.nextLine();
+//			  System.out.println("tableData01 ipAddress : "+ ipAddress);
+//			  System.out.println("tableData01 port : "+ port);
+			s.close();
+			is.close();
+			
+			// JSON 문자열을 파싱하여 필요한 변수에 할당
+			JSONObject jsonObject = new JSONObject(req);
+			String serverip = jsonObject.getString("serverip");
+			String query = jsonObject.getString("query");
+//			  System.out.println("tableData01 serverip : "+ serverip);
+//			  System.out.println("tableData01 query : "+ query);
+			
+			String select_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/select"; // 외부 RESTful API의 URL execute
+			//  System.out.println("tableData01 url : "+ select_url);
+			
+			// 서버로 전송할 객체 생성
+			Map<String, String> requestBody = new LinkedHashMap<>();
+			requestBody.put("query", query);
+			requestBody.put("serverip", serverip);
+			//  System.out.println("tableData01 requestBody : "+ requestBody);
+			
+			// 요청 헤더 설정
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			
+			// HttpEntity 생성
+			HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+			
+			// post 요청 보내기
+			String select_url_resp = restTemplate.postForObject(select_url, requestEntity, String.class);
+			
+//			  System.out.print("select_url_resp"+ select_url_resp);
+			
+			// 응답 데이터를 클라이언트에 반환
+			return select_url_resp;
+			
+			
+			
+		} catch (Exception e) {
+			//  System.out.println("Read Query Error");
+			e.printStackTrace();
+			return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
+		}
+	}
+	
+	
+	
+	
+
+	
+	
+	
+    // Query 5 호출
+	//라이브
+	@PostMapping("/liveDataList")
+	@ResponseBody
+	public String liveDataList(
+			@RequestBody  String req
+			) {
+		
+		//  System.out.println("liveData req: " + req);
+		
 			String ipAddress;
 			String port;
 			
@@ -328,83 +626,8 @@ public class MainController {
 				Scanner s = new Scanner(is);
 				ipAddress = s.nextLine();
 				port = s.nextLine();
-//			    System.out.println("closeGate01 ipAddress : "+ ipAddress);
-//			    System.out.println("closeGate01 port : "+ port);
-				s.close();
-				is.close();
-				
-				// JSON 문자열을 파싱하여 필요한 변수에 할당
-				JSONObject jsonObject = new JSONObject(req);
-				String occuDate = jsonObject.getString("occuDate");
-				String serverip = jsonObject.getString("serverip");
-				String query = jsonObject.getString("query");
-//			    System.out.println("closeGate01 occuDate : "+ occuDate);
-//			    System.out.println("closeGate01 serverip : "+ serverip);
-//			    System.out.println("closeGate01 query : "+ query);
-				
-				String select_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/select"; // 외부 RESTful API의 URL select
-//				System.out.println("closeGate01 url : "+ select_url);
-				
-				// 서버로 전송할 객체 생성
-				Map<String, String> requestBody = new LinkedHashMap<>();
-				requestBody.put("occuDate", occuDate);
-				requestBody.put("query", query);
-				requestBody.put("serverip", serverip);
-//				System.out.println("closeGate01 requestBody : "+ requestBody);
-				
-				// 요청 헤더 설정
-				HttpHeaders headers = new HttpHeaders();
-				headers.setContentType(MediaType.APPLICATION_JSON);
-				
-				// HttpEntity 생성
-				HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
-				
-				// post 요청 보내기
-				String select_url_resp = restTemplate.postForObject(select_url, requestEntity, String.class);
-				
-//				System.out.print("select_url_resp"+ select_url_resp);
-				
-				// 응답 데이터를 클라이언트에 반환
-				return select_url_resp;
-				
-				
-				
-			} catch (Exception e) {
-//				System.out.println("Read Query Error");
-				e.printStackTrace();
-				return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
-			}
-			
-		}
-		
-		
-		
-		
-
-		
-	    // Query 3 호출
-		//테이블
-		@PostMapping("/tableDataList")
-		@ResponseBody
-		public String tableData(
-				@RequestBody  String req
-				) {
-			
-//		    System.out.println("tableData req: " + req);
-			
-			String ipAddress;
-			String port;
-			
-			// MappingJackson2HttpMessageConverter 추가
-			restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-			
-			try {
-				InputStream is = getClass().getResourceAsStream("/server_info.ini");
-				Scanner s = new Scanner(is);
-				ipAddress = s.nextLine();
-				port = s.nextLine();
-//			    System.out.println("tableData ipAddress : "+ ipAddress);
-//			    System.out.println("tableData port : "+ port);
+				//  System.out.println("liveData ipAddress : "+ ipAddress);
+				//  System.out.println("liveData port : "+ port);
 				s.close();
 				is.close();
 				
@@ -412,17 +635,17 @@ public class MainController {
 				JSONObject jsonObject = new JSONObject(req);
 				String serverip = jsonObject.getString("serverip");
 				String query = jsonObject.getString("query");
-//				System.out.println("tableData serverip : "+ serverip);
-//				System.out.println("tableData query : "+ query);
+				//  System.out.println("liveData serverip : "+ serverip);
+				//  System.out.println("liveData query : "+ query);
 				
 				String execute_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/execute"; // 외부 RESTful API의 URL execute
-//				System.out.println("tableData url : "+ execute_url);
+				//  System.out.println("liveData url : "+ execute_url);
 				
 				// 서버로 전송할 객체 생성
 				Map<String, String> requestBody = new LinkedHashMap<>();
 				requestBody.put("query", query);
 				requestBody.put("serverip", serverip);
-//				System.out.println("tableData requestBody : "+ requestBody);
+				//  System.out.println("liveData requestBody : "+ requestBody);
 				
 				// 요청 헤더 설정
 				HttpHeaders headers = new HttpHeaders();
@@ -434,7 +657,7 @@ public class MainController {
 				// post 요청 보내기
 				String execute_url_resp = restTemplate.postForObject(execute_url, requestEntity, String.class);
 				
-//				System.out.print("execute_url_resp"+ execute_url_resp);
+				//  System.out.print("execute_url_resp"+ execute_url_resp);
 				
 				// 응답 데이터를 클라이언트에 반환
 				return execute_url_resp;
@@ -446,24 +669,167 @@ public class MainController {
 				e.printStackTrace();
 				return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
 			}
-		}
+	}
+	
+	
+	
+	
+	
+    // Query 5 받기
+	//라이브
+	@PostMapping("/liveDataList01")
+	@ResponseBody
+	public String liveDataList01(
+			@RequestBody  String req
+			) {
+			//  System.out.println("liveData01 req: " + req);
 		
-		
-		
+			String ipAddress;
+			String port;
 			
+			// MappingJackson2HttpMessageConverter 추가
+			restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 			
+			try {
+				InputStream is = getClass().getResourceAsStream("/server_info.ini");
+				Scanner s = new Scanner(is);
+				ipAddress = s.nextLine();
+				port = s.nextLine();
+				//  System.out.println("liveData01 ipAddress : "+ ipAddress);
+				//  System.out.println("liveData01 port : "+ port);
+				s.close();
+				is.close();
+				
+				// JSON 문자열을 파싱하여 필요한 변수에 할당
+				JSONObject jsonObject = new JSONObject(req);
+				String serverip = jsonObject.getString("serverip");
+				String query = jsonObject.getString("query");
+				//  System.out.println("liveData01 serverip : "+ serverip);
+				//  System.out.println("liveData01 query : "+ query);
+				
+				String select_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/select"; // 외부 RESTful API의 URL execute
+				//  System.out.println("liveData01 url : "+ select_url);
+				
+				// 서버로 전송할 객체 생성
+				Map<String, String> requestBody = new LinkedHashMap<>();
+				requestBody.put("query", query);
+				requestBody.put("serverip", serverip);
+				//  System.out.println("liveData01 requestBody : "+ requestBody);
+				
+				// 요청 헤더 설정
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+				
+				// HttpEntity 생성
+				HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+				
+				// post 요청 보내기
+				String select_url_resp = restTemplate.postForObject(select_url, requestEntity, String.class);
+				
+				//  System.out.print("select_url_resp"+ select_url_resp);
+				
+				// 응답 데이터를 클라이언트에 반환
+				return select_url_resp;
+				
+				
+				
+			} catch (Exception e) {
+				//  System.out.println("Read Query Error");
+				e.printStackTrace();
+				return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
+			}
+		
+	}
+	
+	
+	
+
+	
+	
+	// 수위 유속 유량 테이블
+	@PostMapping("/riverTalbeList")
+	@ResponseBody
+	public String riverTalbeList(
+			@RequestBody  String req
+			) {
+//			  System.out.println("riverTalbeList req: " + req);
+		
+			String ipAddress;
+			String port;
+			
+			// MappingJackson2HttpMessageConverter 추가
+			restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+			
+			try {
+				InputStream is = getClass().getResourceAsStream("/server_info.ini");
+				Scanner s = new Scanner(is);
+				ipAddress = s.nextLine();
+				port = s.nextLine();
+//				  System.out.println("riverTalbeList ipAddress : "+ ipAddress);
+//				  System.out.println("riverTalbeList port : "+ port);
+				s.close();
+				is.close();
+				
+				// JSON 문자열을 파싱하여 필요한 변수에 할당
+				JSONObject jsonObject = new JSONObject(req);
+				String serverip = jsonObject.getString("serverip");
+				String query = jsonObject.getString("query");
+//				  System.out.println("riverTalbeList serverip : "+ serverip);
+//				  System.out.println("riverTalbeList query : "+ query);
+				
+				String select_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/select"; // 외부 RESTful API의 URL execute
+//				  System.out.println("riverTalbeList url : "+ select_url);
+				
+				// 서버로 전송할 객체 생성
+				Map<String, String> requestBody = new LinkedHashMap<>();
+				requestBody.put("query", query);
+				requestBody.put("serverip", serverip);
+//				System.out.println("riverTalbeList requestBody : "+ requestBody);
+				
+				// 요청 헤더 설정
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+				
+				// HttpEntity 생성
+				HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+				
+				// post 요청 보내기
+				String select_url_resp = restTemplate.postForObject(select_url, requestEntity, String.class);
+				
+//				  System.out.println("select_url_resp"+ select_url_resp);
+				
+				// 응답 데이터를 클라이언트에 반환
+				return select_url_resp;
+				
+				
+				
+			} catch (Exception e) {
+				//  System.out.println("Read Query Error");
+				e.printStackTrace();
+				return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
+			}
+		
+	}
+	
+	
+	
 		
 		
 		
-		// Query 3 받기
-		//테이블
-		@PostMapping(value="/tableDataList01", produces="text/plain; charset=UTF-8")
+		
+		
+		/*********************** 라인차트 시작 ********************************/
+		
+		
+		
+		// 수위 라인차트 
+		@PostMapping(value="/waterLevel", produces="text/plain; charset=UTF-8")
 		@ResponseBody
-		public String tableData01(
+		public String waterLevel(
 				@RequestBody  String req
 				) {
 			
-//		   System.out.println("tableData01 req: " + req);
+//			System.out.println("waterLevel라인차트 req: " + req);
 			
 			String ipAddress;
 			String port;
@@ -476,8 +842,8 @@ public class MainController {
 				Scanner s = new Scanner(is);
 				ipAddress = s.nextLine();
 				port = s.nextLine();
-//				  System.out.println("tableData01 ipAddress : "+ ipAddress);
-//				  System.out.println("tableData01 port : "+ port);
+//				  System.out.println("waterLevel ipAddress : "+ ipAddress);
+//				  System.out.println("waterLevel port : "+ port);
 				s.close();
 				is.close();
 				
@@ -485,8 +851,8 @@ public class MainController {
 				JSONObject jsonObject = new JSONObject(req);
 				String serverip = jsonObject.getString("serverip");
 				String query = jsonObject.getString("query");
-//				  System.out.println("tableData01 serverip : "+ serverip);
-//				  System.out.println("tableData01 query : "+ query);
+//				  System.out.println("waterLevel serverip : "+ serverip);
+//				  System.out.println("waterLevel query : "+ query);
 				
 				String select_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/select"; // 외부 RESTful API의 URL execute
 				//  System.out.println("tableData01 url : "+ select_url);
@@ -495,7 +861,7 @@ public class MainController {
 				Map<String, String> requestBody = new LinkedHashMap<>();
 				requestBody.put("query", query);
 				requestBody.put("serverip", serverip);
-				//  System.out.println("tableData01 requestBody : "+ requestBody);
+//				  System.out.println("waterLevel requestBody : "+ requestBody);
 				
 				// 요청 헤더 설정
 				HttpHeaders headers = new HttpHeaders();
@@ -507,12 +873,10 @@ public class MainController {
 				// post 요청 보내기
 				String select_url_resp = restTemplate.postForObject(select_url, requestEntity, String.class);
 				
-//				  System.out.print("select_url_resp"+ select_url_resp);
+//				  System.out.println("waterLevel select_url_resp"+ select_url_resp);
 				
 				// 응답 데이터를 클라이언트에 반환
 				return select_url_resp;
-				
-				
 				
 			} catch (Exception e) {
 				//  System.out.println("Read Query Error");
@@ -523,221 +887,149 @@ public class MainController {
 		
 		
 		
-		
-		
-		// Query 5 호출
-		//라이브
-		@PostMapping("/liveDataList")
+		// 유속 라인차트 
+		@PostMapping(value="/flowRate", produces="text/plain; charset=UTF-8")
 		@ResponseBody
-		public String liveDataList(
+		public String flowRate(
 				@RequestBody  String req
 				) {
 			
-			//  System.out.println("liveData req: " + req);
+//			System.out.println("flowRate라인차트 req: " + req);
 			
-				String ipAddress;
-				String port;
-				
-				// MappingJackson2HttpMessageConverter 추가
-				restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-				
-				try {
-					InputStream is = getClass().getResourceAsStream("/server_info.ini");
-					Scanner s = new Scanner(is);
-					ipAddress = s.nextLine();
-					port = s.nextLine();
-					//  System.out.println("liveData ipAddress : "+ ipAddress);
-					//  System.out.println("liveData port : "+ port);
-					s.close();
-					is.close();
-					
-					// JSON 문자열을 파싱하여 필요한 변수에 할당
-					JSONObject jsonObject = new JSONObject(req);
-					String serverip = jsonObject.getString("serverip");
-					String query = jsonObject.getString("query");
-					//  System.out.println("liveData serverip : "+ serverip);
-					//  System.out.println("liveData query : "+ query);
-					
-					String execute_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/execute"; // 외부 RESTful API의 URL execute
-					//  System.out.println("liveData url : "+ execute_url);
-					
-					// 서버로 전송할 객체 생성
-					Map<String, String> requestBody = new LinkedHashMap<>();
-					requestBody.put("query", query);
-					requestBody.put("serverip", serverip);
-					//  System.out.println("liveData requestBody : "+ requestBody);
-					
-					// 요청 헤더 설정
-					HttpHeaders headers = new HttpHeaders();
-					headers.setContentType(MediaType.APPLICATION_JSON);
-					
-					// HttpEntity 생성
-					HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
-					
-					// post 요청 보내기
-					String execute_url_resp = restTemplate.postForObject(execute_url, requestEntity, String.class);
-					
-					//  System.out.print("execute_url_resp"+ execute_url_resp);
-					
-					// 응답 데이터를 클라이언트에 반환
-					return execute_url_resp;
-					
-					
-					
-				} catch (Exception e) {
-					//  System.out.println("Read Query Error");
-					e.printStackTrace();
-					return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
-				}
-		}
-		
-		
-		
-		
-		
-	    // Query 5 받기
-		//라이브
-		@PostMapping("/liveDataList01")
-		@ResponseBody
-		public String liveDataList01(
-				@RequestBody  String req
-				) {
-				//  System.out.println("liveData01 req: " + req);
-			
-				String ipAddress;
-				String port;
-				
-				// MappingJackson2HttpMessageConverter 추가
-				restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-				
-				try {
-					InputStream is = getClass().getResourceAsStream("/server_info.ini");
-					Scanner s = new Scanner(is);
-					ipAddress = s.nextLine();
-					port = s.nextLine();
-					//  System.out.println("liveData01 ipAddress : "+ ipAddress);
-					//  System.out.println("liveData01 port : "+ port);
-					s.close();
-					is.close();
-					
-					// JSON 문자열을 파싱하여 필요한 변수에 할당
-					JSONObject jsonObject = new JSONObject(req);
-					String serverip = jsonObject.getString("serverip");
-					String query = jsonObject.getString("query");
-					//  System.out.println("liveData01 serverip : "+ serverip);
-					//  System.out.println("liveData01 query : "+ query);
-					
-					String select_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/select"; // 외부 RESTful API의 URL execute
-					//  System.out.println("liveData01 url : "+ select_url);
-					
-					// 서버로 전송할 객체 생성
-					Map<String, String> requestBody = new LinkedHashMap<>();
-					requestBody.put("query", query);
-					requestBody.put("serverip", serverip);
-					//  System.out.println("liveData01 requestBody : "+ requestBody);
-					
-					// 요청 헤더 설정
-					HttpHeaders headers = new HttpHeaders();
-					headers.setContentType(MediaType.APPLICATION_JSON);
-					
-					// HttpEntity 생성
-					HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
-					
-					// post 요청 보내기
-					String select_url_resp = restTemplate.postForObject(select_url, requestEntity, String.class);
-					
-					//  System.out.print("select_url_resp"+ select_url_resp);
-					
-					// 응답 데이터를 클라이언트에 반환
-					return select_url_resp;
-					
-					
-					
-				} catch (Exception e) {
-					//  System.out.println("Read Query Error");
-					e.printStackTrace();
-					return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
-				}
-			
-		}
-		
-		
-		
-		
-		
-		
-		/* ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 프로시저와 쿼리문 받으면 수정해야 함 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ */
-		
-		
-		
-		// 라인차트 
-		@PostMapping("/sendLineQuery")
-		@ResponseBody
-		public String lineChartData(
-				@RequestBody  String req
-				) {
-			
-			System.out.println("라인차트 req: " + req);
+			String ipAddress;
+			String port;
 			
 			// MappingJackson2HttpMessageConverter 추가
-//			restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
+			restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 			
-			
-			// JSON 문자열을 파싱하여 필요한 변수에 할당
-//			JSONObject jsonObject = new JSONObject(req);
-//		    String serverip = jsonObject.getString("serverip");
-//		    String query = jsonObject.getString("query");
-//		    System.out.println("serverip : "+ serverip);
-//		    System.out.println("query : "+ query);
-			
-//		    String url = "http://172.16.103.34:8988/fnvr/request/query/select"; // 외부 RESTful API의 URL select
-	       
-		    
-	       
-	       //서버로 전송할 객체 생성
-//	       Map<String, String> requestBody = new LinkedHashMap<>();
-//	       requestBody.put("serverip", serverip);
-//	       requestBody.put("query", query);
-//	       System.out.println("requestBody : "+ requestBody);
-
-	       // 요청 헤더 설정
-//	       HttpHeaders headers = new HttpHeaders();
-//	       headers.setContentType(MediaType.APPLICATION_JSON);
-
-	       // HttpEntity 생성
-//	       HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
-
-	       // post 요청 보내기
-//	       String sendLineQuery_resp = restTemplate.postForObject(url, requestEntity, String.class);
-	       
-	       
-//	       System.out.print("sendLineQuery_resp"+ sendLineQuery_resp);
-
-	       // 응답 데이터를 클라이언트에 반환
-//	       return sendLineQuery_resp;
-	       return req;
-			
-			
-
+			try {
+				InputStream is = getClass().getResourceAsStream("/server_info.ini");
+				Scanner s = new Scanner(is);
+				ipAddress = s.nextLine();
+				port = s.nextLine();
+//				  System.out.println("flowRate ipAddress : "+ ipAddress);
+//				  System.out.println("flowRate port : "+ port);
+				s.close();
+				is.close();
+				
+				// JSON 문자열을 파싱하여 필요한 변수에 할당
+				JSONObject jsonObject = new JSONObject(req);
+				String serverip = jsonObject.getString("serverip");
+				String query = jsonObject.getString("query");
+//				  System.out.println("flowRate serverip : "+ serverip);
+//				  System.out.println("flowRate query : "+ query);
+				
+				String select_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/select"; // 외부 RESTful API의 URL execute
+				//  System.out.println("flowRate url : "+ select_url);
+				
+				// 서버로 전송할 객체 생성
+				Map<String, String> requestBody = new LinkedHashMap<>();
+				requestBody.put("query", query);
+				requestBody.put("serverip", serverip);
+				//  System.out.println("flowRate requestBody : "+ requestBody);
+				
+				// 요청 헤더 설정
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+				
+				// HttpEntity 생성
+				HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+				
+				// post 요청 보내기
+				String select_url_resp = restTemplate.postForObject(select_url, requestEntity, String.class);
+				
+//				  System.out.print("flowRate select_url_resp"+ select_url_resp);
+				
+				// 응답 데이터를 클라이언트에 반환
+				return select_url_resp;
+				
+			} catch (Exception e) {
+				//  System.out.println("Read Query Error");
+				e.printStackTrace();
+				return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
+			}
 		}
 		
 		
 		
+		// 유량 라인차트 
+		@PostMapping(value="/streamFlow", produces="text/plain; charset=UTF-8")
+		@ResponseBody
+		public String streamFlow(
+				@RequestBody  String req
+				) {
 			
+//			System.out.println("streamFlow 라인차트 req: " + req);
 			
+			String ipAddress;
+			String port;
+			
+			// MappingJackson2HttpMessageConverter 추가
+			restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+			
+			try {
+				InputStream is = getClass().getResourceAsStream("/server_info.ini");
+				Scanner s = new Scanner(is);
+				ipAddress = s.nextLine();
+				port = s.nextLine();
+//				  System.out.println("streamFlow ipAddress : "+ ipAddress);
+//				  System.out.println("streamFlow port : "+ port);
+				s.close();
+				is.close();
+				
+				// JSON 문자열을 파싱하여 필요한 변수에 할당
+				JSONObject jsonObject = new JSONObject(req);
+				String serverip = jsonObject.getString("serverip");
+				String query = jsonObject.getString("query");
+//				  System.out.println("streamFlow serverip : "+ serverip);
+//				  System.out.println("streamFlow query : "+ query);
+				
+				String select_url = "http://"+ipAddress+":"+port+"/fnvr/request/query/select"; // 외부 RESTful API의 URL execute
+				//  System.out.println("streamFlow url : "+ select_url);
+				
+				// 서버로 전송할 객체 생성
+				Map<String, String> requestBody = new LinkedHashMap<>();
+				requestBody.put("query", query);
+				requestBody.put("serverip", serverip);
+				//  System.out.println("streamFlow requestBody : "+ requestBody);
+				
+				// 요청 헤더 설정
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+				
+				// HttpEntity 생성
+				HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+				
+				// post 요청 보내기
+				String select_url_resp = restTemplate.postForObject(select_url, requestEntity, String.class);
+				
+//				  System.out.print("streamFlow select_url_resp"+ select_url_resp);
+				
+				// 응답 데이터를 클라이언트에 반환
+				return select_url_resp;
+				
+			} catch (Exception e) {
+				//  System.out.println("Read Query Error");
+				e.printStackTrace();
+				return ""; // 예외가 발생하면 빈 문자열을 반환하도록 수정
+			}
+		}
+		
+		
+			
+		/*********************** 라인차트 끝 ********************************/	
 		
 		
 		
 		
 		//게이트 현황(왼쪽)
-		@PostMapping("/gateLiveList")
+//		@PostMapping("/gateLiveList")
 		@ResponseBody
 		public String gateLiveListData(
 				@RequestBody  String req
 				) {
 			
-//			System.out.println("req: " + req);
+			System.out.println("req: " + req);
 			
 			// MappingJackson2HttpMessageConverter 추가
 			restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -772,7 +1064,7 @@ public class MainController {
 	       String gateLiveList_resp = restTemplate.postForObject(url, requestEntity, String.class);
 	       
 	       
-	       System.out.print("gateLiveList_resp"+ gateLiveList_resp);
+//	       System.out.print("gateLiveList_resp"+ gateLiveList_resp);
 
 	       // 응답 데이터를 클라이언트에 반환
 	       return gateLiveList_resp;
@@ -786,7 +1078,7 @@ public class MainController {
 		
 
 		//카메라 개수 (왼쪽)
-		@PostMapping("/cameraCount")
+//		@PostMapping("/cameraCount")
 		@ResponseBody
 		public String cameraCountData(
 				@RequestBody  String req
@@ -838,7 +1130,7 @@ public class MainController {
 		
 		
 		//카메라 ip(왼쪽)
-		@PostMapping("/cameraIpList")
+//		@PostMapping("/cameraIpList")
 		@ResponseBody
 		public String cameraIpListData(
 				@RequestBody  String req
